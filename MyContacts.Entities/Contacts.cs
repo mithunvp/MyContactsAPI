@@ -9,9 +9,9 @@ namespace MyContacts.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsFamily { get; set; }
-        public string City { get; set; }        
-        public IEnumerable<ContactEmails> EmailAddresses { get; set; }
-        public IEnumerable<ContactPhones> PhoneNumbers { get; set; }
+        public string City { get; set; }
+        public List<ContactEmails> EmailAddresses { get; set; } = new();
+        public List<ContactPhones> PhoneNumbers { get; set; } = new();
         public DateTime DateOfBirth { get; set; }        
     }
 }

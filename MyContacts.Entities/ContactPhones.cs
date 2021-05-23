@@ -7,6 +7,7 @@
         public string Phone { get; set; }
         public bool IsPrimary { get; set; }
         public PhoneType Type { get; set; }
+        public Contacts Contacts { get; set; }
     }
 
     public enum PhoneType

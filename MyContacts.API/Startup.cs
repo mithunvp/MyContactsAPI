@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyContacts.Providers.DataContext;
 using MyContacts.Providers.Repository;
 
 namespace MyContacts.API
@@ -21,6 +23,8 @@ namespace MyContacts.API
         {
             services.AddControllers();
             services.AddScoped<IContactsRepository, ContactsRepository>();
+            services.AddDbContext<MyContactsDbContext>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
