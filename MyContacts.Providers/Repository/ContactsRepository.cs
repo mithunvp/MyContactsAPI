@@ -1,88 +1,53 @@
-﻿using Bogus;
-using MyContacts.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using MyContacts.Entities;
+using MyContacts.Providers.DataContext;
 
 namespace MyContacts.Providers.Repository
 {
     public class ContactsRepository : IContactsRepository
-    {
-        private static List<Contacts> demoContactsList = new List<Contacts>();
+    {        
+        private readonly MyContactsDbContext _contactsDbContext;
+        public ContactsRepository(MyContactsDbContext contactsDbContext)
+        {
+            _contactsDbContext = contactsDbContext;
+        }
         public Contacts Add(Contacts item)
         {
-            item.Id = new Random().Next(1001, 2000);
-            demoContactsList.Add(item);
+            _contactsDbContext.Contacts.Add(item);
+            _contactsDbContext.SaveChanges();
             return item;
         }
 
         public Contacts Find(int Id)
         {
-            var contactItem = demoContactsList.Find(e => e.Id == Id);
+            var contactItem = _contactsDbContext.Contacts.Find(Id);
             return contactItem;
         }
 
         public IEnumerable<Contacts> GetAll()
         {
-            demoContactsList = FakeContacts().Generate(10);
-            return demoContactsList;
+            return _contactsDbContext.Contacts.ToList();
         }
 
         public void Remove(int Id)
         {
-            var itemToRemove = demoContactsList.SingleOrDefault(r => r.Id == Id);
+            var itemToRemove = _contactsDbContext.Contacts.Find(Id);
             if (itemToRemove != null)
-                demoContactsList.Remove(itemToRemove);
+                _contactsDbContext.Contacts.Remove(itemToRemove);
+            _contactsDbContext.SaveChanges();
         }
 
-        public Contacts Update(Contacts item)
-        {
-            var itemToUpdate = demoContactsList.SingleOrDefault(r => r.Id == item.Id);
+        public Contacts Update(Contacts itemToUpdate)
+        {   
             if (itemToUpdate != null)
             {
-                itemToUpdate.FirstName = item.FirstName;
-                itemToUpdate.LastName = item.LastName;
-                itemToUpdate.IsFamily = item.IsFamily;                
-                itemToUpdate.DateOfBirth = item.DateOfBirth;                
+                itemToUpdate.FirstName = itemToUpdate.FirstName;
+                itemToUpdate.LastName = itemToUpdate.LastName;
+                itemToUpdate.IsFamily = itemToUpdate.IsFamily;                
+                itemToUpdate.DateOfBirth = itemToUpdate.DateOfBirth;                
             }
             return itemToUpdate;
-        }
-
-        #region FakeData
-        private List<ContactEmails> FakeContactEmails()
-        {
-            var fakeContactEmails = new Faker<ContactEmails>()
-                .RuleFor(c => c.Id, f => f.IndexVariable++)
-                .RuleFor(c => c.Email, (f, u) => f.Internet.Email())
-                .RuleFor(c => c.IsPrimary, f => f.Random.Bool());
-
-            return fakeContactEmails.Generate(4);
-        }
-
-        private List<ContactPhones> FakeContactPhones()
-        {
-            var fakeContactEmails = new Faker<ContactPhones>()
-                .RuleFor(c => c.Id, f => f.IndexVariable++)
-                .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber())
-                .RuleFor(c=> c.Type, f => f.PickRandom<PhoneType>())
-                .RuleFor(c => c.IsPrimary, f => f.Random.Bool());
-
-            return fakeContactEmails.Generate(4);
-        }
-
-        private Faker<Contacts> FakeContacts()
-        {
-            var fakeContact = new Faker<Contacts>()
-                .RuleFor(c => c.Id, f => f.Random.Number(1, 1000))
-                .RuleFor(c => c.FirstName, f => f.Name.FirstName())
-                .RuleFor(c => c.LastName, f => f.Name.LastName())
-                .RuleFor(c => c.City, f => f.Address.City())
-                .RuleFor(c => c.DateOfBirth, f => f.Date.Past())
-                .RuleFor(c => c.EmailAddresses, f => FakeContactEmails())
-                .RuleFor(c => c.PhoneNumbers, f => FakeContactPhones());
-
-            return fakeContact;
-        }
-        #endregion
+        }        
     }
 }
