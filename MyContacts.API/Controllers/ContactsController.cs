@@ -23,7 +23,7 @@ namespace MyContacts.API.Controllers
             return Ok(_contactsRepository.GetAll());
         }
 
-        [HttpGet("{id}", Name = "GetContacts")]
+        [HttpGet("{id}")]
         public ActionResult GetById(int id)
         {
             var item = _contactsRepository.Find(id);

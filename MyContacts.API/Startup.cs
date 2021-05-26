@@ -23,6 +23,9 @@ namespace MyContacts.API
         {
             services.AddControllers();
             services.AddScoped<IContactsRepository, ContactsRepository>();
+            // Repository to demostrate Async APIs
+            services.AddScoped<IContactsAsyncRepository, ContactsAsyncRepository>();
+            
             services.AddDbContext<MyContactsDbContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
