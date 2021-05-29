@@ -11,5 +11,7 @@ namespace MyContacts.Providers.Repository
         Task<Contacts> FindAsync(int id);
         Task RemoveAsync(int Id);
         Task UpdateAsync(Contacts item);
+        bool CheckValidUserKey(string reqkey);
+
     }
 }
