@@ -12,11 +12,10 @@ namespace MyContacts.Providers.Repository
         {
             _contactsDbContext = contactsDbContext;
         }
-        public Contacts Add(Contacts item)
+        public void Add(Contacts item)
         {
             _contactsDbContext.Contacts.Add(item);
-            _contactsDbContext.SaveChanges();
-            return item;
+            _contactsDbContext.SaveChanges();            
         }
 
         public Contacts Find(int Id)
@@ -38,7 +37,7 @@ namespace MyContacts.Providers.Repository
             _contactsDbContext.SaveChanges();
         }
 
-        public Contacts Update(Contacts itemToUpdate)
+        public void Update(Contacts itemToUpdate)
         {   
             if (itemToUpdate != null)
             {
@@ -47,7 +46,7 @@ namespace MyContacts.Providers.Repository
                 itemToUpdate.IsFamily = itemToUpdate.IsFamily;                
                 itemToUpdate.DateOfBirth = itemToUpdate.DateOfBirth;                
             }
-            return itemToUpdate;
+            _contactsDbContext.SaveChanges();
         }        
     }
 }

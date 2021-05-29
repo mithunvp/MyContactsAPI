@@ -46,7 +46,7 @@ namespace MyContacts.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Contacts item)
+        public async Task<IActionResult> Update(int id, Contacts item)
         {
             if (item == null)
             {
@@ -57,8 +57,8 @@ namespace MyContacts.API.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(await _contactsAsyncRepository.UpdateAsync(item));
+            await _contactsAsyncRepository.UpdateAsync(item);
+            return Ok();
         }
 
         [HttpDelete("{id}")]

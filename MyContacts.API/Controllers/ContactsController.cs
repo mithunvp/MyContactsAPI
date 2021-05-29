@@ -18,13 +18,13 @@ namespace MyContacts.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Contacts>> GetAll()
+        public IActionResult GetAll()
         {
             return Ok(_contactsRepository.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetById(int id)
+        [HttpGet("{id}", Name= "GetContacts")]
+        public IActionResult GetById(int id)
         {
             var item = _contactsRepository.Find(id);
             if (item == null)
@@ -46,7 +46,7 @@ namespace MyContacts.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, [FromBody] Contacts item)
+        public IActionResult Update(int id, [FromBody] Contacts item)
         {
             if (item == null)
             {
@@ -57,12 +57,12 @@ namespace MyContacts.API.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(_contactsRepository.Update(item));
+            _contactsRepository.Update(item);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             _contactsRepository.Remove(id);
             return NoContent();
